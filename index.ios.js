@@ -4,57 +4,63 @@
  */
 'use strict';
 var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/posts/?_embed';
-import React, {
+
+var React = require('react-native');
+var {
 	AppRegistry,
-	Component,
-	ListView,
 	StyleSheet,
 	Text,
 	View,
-} from 'react-native';
+	ListView,
+	Image,
+	NavigatorIOS,
+	TouchableWithoutFeedback,
+	WebView
+} = React;
 
-class reactWpApp extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			dataSource: new ListView.DataSource({
+
+var reactWpApp = React.createClass({
+	render: function() {
+		return (
+			<NavigatorIOS
+				style={styles.navigator}
+				initialRoute={{
+					component: ReactWordPressList,
+					title: 'React WordPress',
+			}}/>
+		);
+	}
+})
+
+
+var ReactWordPressList = React.createClass({
+	getInitialState: function() {
+		return {
+			items: new ListView.DataSource({
 				rowHasChanged: (row1, row2) => row1 !== row2,
 			}),
 			loaded: false,
 		};
-	}
+	},
 
-	componentDidMount() {
+	componentDidMount: function() {
 		this.fetchData();
-	}
+	},
 
-	fetchData() {
-		fetch(REQUEST_URL)
-			.then((response) => response.json())
-			.then((responseData) => {
-				console.log(responseData);
-				this.setState({
-					dataSource: this.state.dataSource.cloneWithRows(responseData),
-					loaded: true,
-				});
-			})
-			.done();
-	}
-
-	render() {
-		if (!this.state.loaded) {
+	render: function() {
+		if ( !this.state.loaded ) {
 			return this.renderLoadingView();
 		}
+
 		return (
 			<ListView
-				dataSource={this.state.dataSource}
-				renderRow={this.renderPost}
-				style={styles.listView}
-			/>
+				dataSource={this.state.items}
+				renderRow={this.renderItem}
+				style={styles.listView}/>
 		);
-	}
+	},
 
-	renderLoadingView() {
+	renderLoadingView: function() {
 		return (
 			<View style={styles.container}>
 				<Text>
@@ -62,52 +68,86 @@ class reactWpApp extends Component {
 				</Text>
 			</View>
 		);
-	}
+	},
 
-	renderPost(post) {
-		var date = new Date(post.date_gmt).toLocaleDateString();
-		var author = post['_embedded']['author'][0]['name'];
+	renderItem: function( item, sectionID, rowID ) {
 		return (
-			<View style={styles.container}>
-				<View style={styles.innerContainer}>
-					<Text style={styles.title}>{post.title.rendered}</Text>
-					<Text style={styles.postInfo}>{date}　{author}</Text>
+			<TouchableWithoutFeedback	onPress={ () => this.onPressed( item ) }>
+				<View style={styles.container}>
+					<Image
+						source={{uri: 'http://placehold.it/150x150'}}
+						style={styles.thumbnail}/>
+					<View style={styles.rightContainer}>
+						<Text style={styles.title}>{item.title.rendered}</Text>
+					</View>
 				</View>
-			 </View>
-			);
-		}
+			</TouchableWithoutFeedback>
+		);
+	},
+
+	fetchData: function() {
+		fetch( REQUEST_URL )
+			.then( ( response ) => response.json())
+			.then( ( responseData ) => {
+				this.setState({
+					items: this.state.items.cloneWithRows( responseData ),
+					loaded: true,
+				});
+			})
+			.done();
+	},
+
+	onPressed: function( item ) {
+		this.props.navigator.push({
+			title: item.title.rendered,
+			component: ReactWordPressItemView,
+			passProps: { item: item }
+		})
+	},
+});
+
+var ReactWordPressItemView = React.createClass({
+	render: function() {
+		return (
+			<WebView
+				source={{html: this.props.item.content.rendered}}
+			/>
+		)
 	}
+});
 
-	var styles = StyleSheet.create({
-		container: {
-			flex: 1,
-			flexDirection: 'row',
-			justifyContent: 'center',
-			alignItems: 'center',
-			backgroundColor: '#F5FCFF',
-			borderBottomWidth: 1,
-			borderBottomColor: '#dedede'
-		},
-		innerContainer: {
-			flex: 1,
-			marginRight: 20,
-			marginLeft: 20,
-			marginTop: 20,
-			marginBottom: 20,
-		},
-		title: {
-			fontSize: 20,
-			marginBottom: 8,
-			textAlign: 'center',
-		},
-		postInfo: {
-			fontSize: 10,
-			textAlign: 'center',
-		},
-		listView: {
-			paddingTop: 20,
-			backgroundColor: '#F5FCFF',
-		},
-	});
+var styles = StyleSheet.create({
+	navigator: {
+		flex: 1
+	},
+	container: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#FFFFFF',
+	},
+	rightContainer: {
+		flex: 1,
+	},
+	title: {
+		fontSize: 15,
+		margin: 8,
+		textAlign: 'left',
+	},
+	name: {
+		fontSize: 12,
+		margin: 8,
+		textAlign: 'left',
+	},
+	thumbnail: {
+		width: 80,
+		height: 80,
+		margin: 2,
+	},
+	listView: {
+		backgroundColor: '#FFFFFF',
+	},
+});
 
-AppRegistry.registerComponent('reactWpApp', () => reactWpApp);
+AppRegistry.registerComponent( 'reactWpApp', () => reactWpApp );
