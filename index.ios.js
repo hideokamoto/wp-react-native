@@ -11,6 +11,7 @@ var {
 	Text,
 } = React;
 var PostRow = require('./app/post.ios.js');
+var MediaRow = require('./app/media.ios.js');
 
 var reactWpApp = React.createClass({
 
