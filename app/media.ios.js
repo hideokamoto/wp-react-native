@@ -1,5 +1,6 @@
 'use strict';
-var React = require('react-native');var {
+var React = require('react-native');
+var {
 	AppRegistry,
 	StyleSheet,
 	Text,
@@ -10,7 +11,7 @@ var React = require('react-native');var {
 	TouchableWithoutFeedback,
 	WebView
 } = React;
-var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/posts/?_embed';
+var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/media/';
 
 var MediaRow = React.createClass({
 	render: function() {
@@ -19,7 +20,7 @@ var MediaRow = React.createClass({
 				style={styles.navigator}
 				initialRoute={{
 					component: MediaList,
-					title: 'React WordPress',
+					title: 'Media',
 			}}/>
 		);
 	}
@@ -68,7 +69,7 @@ var MediaList = React.createClass({
 			<TouchableWithoutFeedback	onPress={ () => this.onPressed( item ) }>
 				<View style={styles.container}>
 					<Image
-						source={{uri: 'http://placehold.it/150x150'}}
+						source={{uri: item.source_url}}
 						style={styles.thumbnail}/>
 					<View style={styles.rightContainer}>
 						<Text style={styles.title}>{item.title.rendered}</Text>
@@ -82,6 +83,7 @@ var MediaList = React.createClass({
 		fetch( REQUEST_URL )
 			.then( ( response ) => response.json())
 			.then( ( responseData ) => {
+				console.log(responseData);
 				this.setState({
 					items: this.state.items.cloneWithRows( responseData ),
 					loaded: true,
@@ -102,14 +104,51 @@ var MediaList = React.createClass({
 var MediaView = React.createClass({
 	render: function() {
 		return (
-			<WebView
-				source={{html: this.props.item.content.rendered}}
-			/>
+			<View style={styles.container}>
+				<Image
+					source={{uri: this.props.item.source_url}}
+					style={styles.imageView}/>
+			</View>
 		)
 	}
 });
 
 var styles = StyleSheet.create({
+	navigator: {
+		flex: 1
+	},
+	container: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#FFFFFF',
+	},
+	rightContainer: {
+		flex: 1,
+	},
+	title: {
+		fontSize: 15,
+		margin: 8,
+		textAlign: 'left',
+	},
+	name: {
+		fontSize: 12,
+		margin: 8,
+		textAlign: 'left',
+	},
+	thumbnail: {
+		width: 80,
+		height: 80,
+		margin: 2,
+	},
+	imageView: {
+		width: 300,
+		height: 300,
+	},
+	listView: {
+		backgroundColor: '#FFFFFF',
+	},
 });
 
 module.exports = MediaRow;

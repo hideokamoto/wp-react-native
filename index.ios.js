@@ -36,7 +36,7 @@ var reactWpApp = React.createClass({
 			);
 		} else if ( 'media' == type ) {
 			return (
-				<PostRow />
+				<MediaRow />
 			);
 		}
 		return (
