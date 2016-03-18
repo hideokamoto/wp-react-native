@@ -7,6 +7,8 @@ var {
 	AppRegistry,
 	StyleSheet,
 	TabBarIOS,
+	View,
+	Text,
 } = React;
 var PostRow = require('./app/post.ios.js');
 
@@ -26,9 +28,20 @@ var reactWpApp = React.createClass({
 			presses: 0,
 		};
 	},
-	_renderContent: function(color: string, pageText: string, num?: number) {
+	_renderContent: function( type: string ) {
+		if ( 'post' == type ) {
+			return (
+				<PostRow />
+			);
+		} else if ( 'media' == type ) {
+			return (
+				<PostRow />
+			);
+		}
 		return (
-			<PostRow />
+			<View>
+				<Text>No Data.</Text>
+			</View>
 		);
 	},
 
@@ -46,7 +59,7 @@ var reactWpApp = React.createClass({
 							selectedTab: 'blueTab',
 						});
 					}}>
-					{this._renderContent('#414A8C', 'Blue Tab')}
+					{this._renderContent('post')}
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title="Media"
@@ -58,7 +71,7 @@ var reactWpApp = React.createClass({
 							notifCount: this.state.notifCount + 1,
 						});
 					}}>
-					{this._renderContent('#783E33', 'Red Tab', this.state.notifCount)}
+					{this._renderContent('media')}
 				</TabBarIOS.Item>
 			</TabBarIOS>
 		)
