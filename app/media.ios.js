@@ -11,7 +11,7 @@ var {
 	TouchableWithoutFeedback,
 	WebView
 } = React;
-var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/media/';
+var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/media/?per_page=30';
 
 var MediaRow = React.createClass({
 	render: function() {
@@ -71,9 +71,6 @@ var MediaList = React.createClass({
 					<Image
 						source={{uri: item.source_url}}
 						style={styles.thumbnail}/>
-					<View style={styles.rightContainer}>
-						<Text style={styles.title}>{item.title.rendered}</Text>
-					</View>
 				</View>
 			</TouchableWithoutFeedback>
 		);
@@ -83,7 +80,6 @@ var MediaList = React.createClass({
 		fetch( REQUEST_URL )
 			.then( ( response ) => response.json())
 			.then( ( responseData ) => {
-				console.log(responseData);
 				this.setState({
 					items: this.state.items.cloneWithRows( responseData ),
 					loaded: true,
@@ -104,7 +100,7 @@ var MediaList = React.createClass({
 var MediaView = React.createClass({
 	render: function() {
 		return (
-			<View style={styles.container}>
+			<View style={styles.imageContainer}>
 				<Image
 					source={{uri: this.props.item.source_url}}
 					style={styles.imageView}/>
@@ -120,17 +116,14 @@ var styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
+		flexWrap: 'wrap',
 		backgroundColor: '#FFFFFF',
 	},
-	rightContainer: {
+	imageContainer: {
 		flex: 1,
-	},
-	title: {
-		fontSize: 15,
-		margin: 8,
-		textAlign: 'left',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		backgroundColor: '#FFFFFF',
 	},
 	name: {
 		fontSize: 12,
@@ -138,11 +131,14 @@ var styles = StyleSheet.create({
 		textAlign: 'left',
 	},
 	thumbnail: {
-		width: 80,
-		height: 80,
+		flex: 1,
+		width: 64,
+		height: 128,
 		margin: 2,
 	},
 	imageView: {
+		flex: 1,
+		justifyContent: 'center',
 		width: 300,
 		height: 300,
 	},

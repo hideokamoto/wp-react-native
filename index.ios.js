@@ -24,9 +24,7 @@ var reactWpApp = React.createClass({
 
 	getInitialState: function() {
 		return {
-			selectedTab: 'redTab',
-			notifCount: 0,
-			presses: 0,
+			selectedTab: 'postTab',
 		};
 	},
 	_renderContent: function( type: string ) {
@@ -54,10 +52,10 @@ var reactWpApp = React.createClass({
 				<TabBarIOS.Item
 					title="Post List"
 					icon={{uri: base64Icon, scale: 3}}
-					selected={this.state.selectedTab === 'blueTab'}
+					selected={this.state.selectedTab === 'postTab'}
 					onPress={() => {
 						this.setState({
-							selectedTab: 'blueTab',
+							selectedTab: 'postTab',
 						});
 					}}>
 					{this._renderContent('post')}
@@ -65,11 +63,10 @@ var reactWpApp = React.createClass({
 				<TabBarIOS.Item
 					title="Media"
 					icon={{uri: base64Icon, scale: 3}}
-					selected={this.state.selectedTab === 'redTab'}
+					selected={this.state.selectedTab === 'mediaTab'}
 					onPress={() => {
 						this.setState({
-							selectedTab: 'redTab',
-							notifCount: this.state.notifCount + 1,
+							selectedTab: 'mediaTab',
 						});
 					}}>
 					{this._renderContent('media')}

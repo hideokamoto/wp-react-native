@@ -10,7 +10,7 @@ var React = require('react-native');var {
 	TouchableWithoutFeedback,
 	WebView
 } = React;
-var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/posts/?_embed';
+var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/posts/?per_page=30&_embed';
 
 var PostRow = React.createClass({
 	render: function() {
