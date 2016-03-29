@@ -10,7 +10,6 @@ var React = require('react-native');var {
 	TouchableWithoutFeedback,
 	WebView
 } = React;
-var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/posts/?per_page=30&_embed';
 
 var PostRow = React.createClass({
 	render: function() {
@@ -20,6 +19,9 @@ var PostRow = React.createClass({
 				initialRoute={{
 					component: PostList,
 					title: 'React WordPress',
+					passProps: {
+						apiPath: this.props.apiPath
+					}
 			}}/>
 		);
 	}
@@ -79,7 +81,7 @@ var PostList = React.createClass({
 	},
 
 	fetchData: function() {
-		fetch( REQUEST_URL )
+		fetch( this.props.apiPath )
 			.then( ( response ) => response.json())
 			.then( ( responseData ) => {
 				this.setState({

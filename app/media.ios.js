@@ -11,7 +11,6 @@ var {
 	TouchableWithoutFeedback,
 	WebView
 } = React;
-var REQUEST_URL = 'http://wp-kyoto.net/wp-json/wp/v2/media/?per_page=30';
 
 var MediaRow = React.createClass({
 	render: function() {
@@ -21,6 +20,9 @@ var MediaRow = React.createClass({
 				initialRoute={{
 					component: MediaList,
 					title: 'Media',
+					passProps: {
+						apiPath: this.props.apiPath
+					}
 			}}/>
 		);
 	}
@@ -77,7 +79,7 @@ var MediaList = React.createClass({
 	},
 
 	fetchData: function() {
-		fetch( REQUEST_URL )
+		fetch( this.props.apiPath )
 			.then( ( response ) => response.json())
 			.then( ( responseData ) => {
 				this.setState({
