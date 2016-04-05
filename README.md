@@ -24,6 +24,11 @@ $ react-native run-android
 Please make GitHub Issues. -> https://github.com/hideokamoto/wp-react-native/issues
 
 ###If you want to add some function
-1st:Fork this repository
-2nd:Write some code to add function that you want to add.
-3rd:Make Pull Request
+- 1:Fork this repository
+- 2:Write some code to add function that you want to add.
+- 3:Make Pull Request
+
+##Using
+- [React Native UI Components for Material Design](https://github.com/react-native-material-design/react-native-material-design)
+- [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
+- [React Native](https://facebook.github.io/react-native/)
