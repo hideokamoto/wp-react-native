@@ -9,7 +9,7 @@ This is Native Application Template by using WP REST API.
 
 ##Getting Start
 ```
-$ git clone git@github.com:hideokamoto/wp-react-native.git
+$ git clone https://github.com/hideokamoto/wp-react-native.git
 $ cd wp-react-native
 $ npm install
 $ npm Start
